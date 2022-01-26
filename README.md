@@ -1,5 +1,7 @@
 # docker-easyconnect[shadowsocks]
 
+[![Build Docker Image Test](https://github.com/Flying-Tom/docker-easyconnect/actions/workflows/build.yml/badge.svg)](https://github.com/Flying-Tom/docker-easyconnect/actions/workflows/build.yml)
+
 > 让深信服开发的非自由的 EasyConnect 代理软件运行在 docker 中，并开放 Socks5 供宿主机连接以使用代理。
 
 该分支为原项目[Hagb/docker-easyconnect](https://github.com/Hagb/docker-easyconnect)的CLI版本添加了shadowsocks实现代理转发，使得面向公网开放代理端口的容器更为安全
@@ -20,8 +22,7 @@
 
 3. shadowsocks的配置文件在`docker-root/etc/shadowsocks-libev`目录下，请自行修改相应的参数(如密码等)
 
-
-4. 在项目根目录下执行`bash install.sh`
+4. 在项目根目录下执行`bash install.sh`，若显示登录成功则说明配置完成。如果关闭终端导致容器停止，手动重启即可。
 
 5. 如需要容器自启动，请执行如下的命令
 
