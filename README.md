@@ -1,20 +1,43 @@
-# docker-easyconnect[NJU]
+# docker-easyconnect[shadowsocks]
 
-Fork自原项目，将EasyConnect封装在Docker容器中，开放socks5端口和http端口以使用代理
+> 让深信服开发的非自由的 EasyConnect 代理软件运行在 docker 中，并开放 Socks5 供宿主机连接以使用代理。
 
-该分支在原项目的基础上，仅保留了CLI版本，主要添加了shadowsocks以实现代理的加密功能，可以将容器托管在服务器上向公网开放
-
-shadowsocks的配置文件在`docker-root/etc/shadowsocks-libev`目录下，密码等参数如有需要请自行修改
-
-
+该分支为原项目[Hagb/docker-easyconnect](https://github.com/Hagb/docker-easyconnect)的CLI版本添加了shadowsocks实现代理转发，使得面向公网开放代理端口的容器更为安全
 
 ## 使用方法
 
-1. 修改项目根目录下`install.sh`中的`username`, `password`和`vpnaddress`变量
+1. 安装Docker并运行 ([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 
-2. 执行`bash install.sh`
+2. 修改项目根目录下`install.sh`中的相应参数
 
-具体的设置和参数请参见原项目
+- `username` 为Easyconnect用户名
+- `password` 为Easyconnect密码
+- `vpnaddress` 为vpn地址
+- `EC_VER` 为EasyConnect的版本号 [ 7.6.3 | 7.6.7 ]
+- socks5端口为1080, http端口为8888，如有需要可自行修改
+
+> 如果是在服务器上部署，请确保您已在服务商控制台打开了socks5/http端口
+
+3. shadowsocks的配置文件在`docker-root/etc/shadowsocks-libev`目录下，请自行修改相应的参数(如密码等)
+
+
+4. 在项目根目录下执行`bash install.sh`
+
+5. 如需要容器自启动，请执行如下的命令
+
+```bash 
+docker update --restart=always easyconnss
+```
+
+更为具体的设置和参数请参见原项目[Hagb/docker-easyconnect](https://github.com/Hagb/docker-easyconnect)
+
+## 改动
+
+1. 仅保留了CLI版本，同时因为使用了shadowsocks-libev所以移去了容器内的dante-server和tinyproxy
+
+2. 因为原来repo中的Dockerfile.cli是将命令行版客户端deb包放在容器内进行的，所以本地构建可能会遇到一些网络问题，因而我将该deb包放在了`CLI`文件夹下方便本地构建
+
+> 基于 EasyConnect 官方“Linux”版的 deb 包以及 [@shmille](https://github.com/shmilee) 提供的[命令行版客户端 deb 包](https://github.com/shmilee/scripts/releases/download/v0.0.1/easyconn_7.6.8.2-ubuntu_amd64.deb)。
 
 ## 版权及许可证
 
