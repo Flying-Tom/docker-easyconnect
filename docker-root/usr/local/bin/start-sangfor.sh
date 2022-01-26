@@ -1,4 +1,12 @@
 #!/bin/bash
+
+# 启动 ss-server
+nohup ss-server \
+-c /etc/shadowsocks-libev/config.json \
+-c /etc/shadowsocks-libev/config-obfs.json \
+> /dev/null 2>&1 &
+
+
 [ -z "$_EC_CLI" ] && /usr/share/sangfor/EasyConnect/resources/bin/EasyMonitor
 sleep 1
 while true
@@ -18,8 +26,7 @@ do
 		sleep 1
 		easyconn login -t autologin
 		pidof svpnservice > /dev/null || bash -c "exec easyconn login $CLI_OPTS"
-		# # 重启一下 tinyproxy
-		# service tinyproxy restart
+
 		while pidof svpnservice > /dev/null ; do
 		       sleep 1
 		done

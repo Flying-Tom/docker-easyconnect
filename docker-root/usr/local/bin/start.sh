@@ -5,26 +5,13 @@ detect-iptables.sh
 . "$(which detect-route.sh)"
 [ -n "$CHECK_SYSTEM_ONLY" ] && exit
 
-# 在虚拟网络设备 tun0 打开时运行 proxy 代理服务器
-[ -n "$NODANTED" ] || (while true
-do
-sleep 5
-[ -d /sys/class/net/tun0 ] && {
-	chmod a+w /tmp
-	open_port 1080
-	su daemon -s /usr/sbin/danted
-	close_port 1080
-}
-done
-)&
+open_port 1080
 open_port 8888
-tinyproxy -c /etc/tinyproxy.conf
 
 interface_name="eth0"
 
 # 如果是 podman 容器，interface 名称为 tap0 而不是 eth0
 if [[ -n "$container" && "$container" == "podman" ]]; then
-	sed --in-place=.bak 's/eth0/tap0/g' /etc/danted.conf
 	interface_name="tap0"
 fi
 
@@ -54,26 +41,7 @@ fi
 ## 默认使用英语：感谢 @forest0 https://github.com/Hagb/docker-easyconnect/issues/2#issuecomment-658205504
 [ -e ~/conf/easy_connect.json ] || echo '{"language": "en_US"}' > ~/conf/easy_connect.json
 
-export DISPLAY
-
-if [ "$TYPE" != "X11" -a "$TYPE" != "x11" ]
-then
-	# container 再次运行时清除 /tmp 中的锁，使 container 能够反复使用。
-	# 感谢 @skychan https://github.com/Hagb/docker-easyconnect/issues/4#issuecomment-660842149
-	rm -rf /tmp
-	mkdir /tmp
-
-	# $PASSWORD 不为空时，更新 vnc 密码
-	[ -e ~/.vnc/passwd ] || (mkdir -p ~/.vnc && (echo password | tigervncpasswd -f > ~/.vnc/passwd)) 
-	[ -n "$PASSWORD" ] && printf %s "$PASSWORD" | tigervncpasswd -f > ~/.vnc/passwd
-
-	open_port 5901
-	tigervncserver :1 -geometry 800x600 -localhost no -passwd ~/.vnc/passwd -xstartup flwm
-	DISPLAY=:1
-
-	# 将 easyconnect 的密码放入粘贴板中，应对密码复杂且无法保存的情况 (eg: 需要短信验证登录)
-	# 感谢 @yakumioto https://github.com/Hagb/docker-easyconnect/pull/8
-	echo "$ECPASSWORD" | DISPLAY=:1 xclip -selection c
-fi
+rm -rf /tmp
+mkdir /tmp
 
 exec start-sangfor.sh
