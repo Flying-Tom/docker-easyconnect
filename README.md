@@ -10,25 +10,21 @@
 
 1. 安装Docker并运行 ([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 
-2. 修改项目根目录下`install.sh`中的相应参数
+2. 安装Docker-Compose, 其中`docker-compose.yaml`中的参数可自行修改
 
-- `username` 为Easyconnect用户名
-- `password` 为Easyconnect密码
-- `vpnaddress` 为vpn地址
 - `EC_VER` 为EasyConnect的版本号 [ 7.6.3 | 7.6.7 ]
-- socks5端口为1080, http端口为8888，如有需要可自行修改
+- socks5端口为1080, http端口为8888
+
+3. 在`~/.bashrc`里添加如下的环境变量
+
+- `EASYCONN_USERNAME` 为Easyconnect用户名
+- `EASYCONN_PASSWORD` 为Easyconnect密码
+- `EASYCONN_VPNURL` 为vpn地址
+- `EASYCONN_TESTURL` 为一个内网地址，用来测试容器是否连通
 
 > 如果是在服务器上部署，请确保您已在服务商控制台打开了socks5/http端口
 
-3. shadowsocks的配置文件在`docker-root/etc/shadowsocks-libev`目录下，请自行修改相应的参数(如密码等)
-
-4. 在项目根目录下执行`bash install.sh`，若显示登录成功则说明配置完成。如果关闭终端导致容器停止，手动重启即可。
-
-5. 如需要容器自启动，请执行如下的命令
-
-```bash 
-docker update --restart=always easyconnss
-```
+3. shadowsocks的配置文件在`docker-root/etc/shadowsocks-libev`目录下，**请修改相应的参数**(如密码等敏感参数)
 
 更为具体的设置和参数请参见原项目[Hagb/docker-easyconnect](https://github.com/Hagb/docker-easyconnect)
 

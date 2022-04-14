@@ -3,7 +3,7 @@
     "mode":"tcp_and_udp",
     "server_port":1080,
     "local_port":1080,
-    "password":"IloveEasyconnect",
+    "password":"docker-easyconnect",
     "timeout":300,
     "method":"chacha20-ietf-poly1305"
 }

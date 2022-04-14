@@ -1,8 +1,7 @@
 FROM debian:buster-slim
 
-ARG BUILD_ENV=local
-
-RUN if [ "${BUILD_ENV}" = "local" ]; then sed -i s/deb.debian.org/mirrors.nju.edu.cn/ /etc/apt/sources.list; fi &&\
+RUN sed -i "s/deb.debian.org/mirrors.cloud.tencent.com/g" /etc/apt/sources.list; \
+    sed -i "s/security.debian.org/mirrors.cloud.tencent.com/g" /etc/apt/sources.list; \
     apt-get update && \
     apt-get install -y --no-install-recommends --no-install-suggests iptables \
     busybox iproute2 shadowsocks-libev simple-obfs && \

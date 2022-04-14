@@ -1,0 +1,21 @@
+version: '3'
+services:
+  easyconn:
+    build: .
+    ports:
+      - "1080:1080"
+      - "8888:8888"
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Shanghai
+      EC_VER: 7.6.3
+      CLI_OPTS: "-d ${EASYCONN_VPNURL} -u ${EASYCONN_USERNAME} -p ${EASYCONN_PASSWORD}"
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    healthcheck:
+      test: [ "CMD", "root" ,"curl", "${EASYCONN_TESTURL}"]
+      timeout: 10s
+      interval: 600s
+      retries: 3
